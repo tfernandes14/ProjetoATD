@@ -1,3 +1,7 @@
+close all
+clear all
+clc
+
 Expr={'21','22','23','24','25','26','27','28','29','30'};
 User={'10','11','12','13','14','15'};
 Sensors={'ACC_X','ACC_Y','ACC_Z'};
@@ -18,8 +22,12 @@ t=(0:size(data,1)-1)./Fs;
 
 [n_points,n_plots]=size(data);
 
+aac_x = cell(1, numel(ix_labels));
+aac_y = cell(1, numel(ix_labels));
+aac_z = cell(1, numel(ix_labels));
+
 % Fazer um plot de todos os canais (x,y,z)
-figure
+figure(1)
 for i=1:n_plots
     subplot(n_plots,1,i);
     plot(t./60,data(:,i),'k--');
@@ -34,8 +42,80 @@ for i=1:n_plots
         else
             ypos=max(data(:,i))-(0.2*min(data(:,i)));
         end
+        %calcular a fft
+        aux = abs(fftshift(fft(data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i))));
+        if i == 1
+            aac_x{1, j} = aux;
+        end
+        if i == 2
+            aac_y{1, j} = aux;
+        end
+        if i == 3
+            aac_z{1, j} = aux;
+        end
         text(t(all_labels(ix_labels(j),4))/60,ypos,activities{all_labels(ix_labels(j),3)});
     end
-    
     hold off
+end
+
+disp("Valores DFT de AAC_X:")
+aac_x
+disp("Valores DFT de AAC_Y:")
+aac_y
+disp("Valores DFT de AAC_Z:")
+aac_z
+
+
+figure(2)
+for i=1:numel(ix_labels)
+    N= length(aac_x{1,i});
+   
+   if (mod(N,2) == 0)
+        f = -Fs/2:Fs/N:Fs/2-Fs/N;
+   else
+        f = -Fs/2+Fs/(2*N):Fs/N:Fs/2-Fs/(2*N);
+    end
+    plot(f, aac_x{1,i})
+    hold on
+end
+
+figure(3)
+%varias janelas
+
+aac_x_janelas = cell(1, numel(ix_labels));
+aac_y_janelas = cell(1, numel(ix_labels));
+aac_z_janelas = cell(1, numel(ix_labels));
+for i=1:n_plots
+    for j=1:numel(ix_labels)    
+        %fazer a concatenaçao dos zeros estamos a aumentar o padding e
+        %assim as curvas tornam-se mais suaves o que permite uma melhor
+        %comparação que ira ser usasda para o relatorio  ps: nao esquecer
+        %que é necessario fazer À dft tambem a comcatenaçao do array de
+        %zeros como mostra o exemplo abaixo
+        
+        %NAO METER OS GRAFICOS TODOS JUNTOS TEMOS DE SEPARA-LOS MAS TAMBEM
+        %NAO PERCISAMOS DE MOSTRAR TODOS SO OS DO MOVIMENTO
+        aux = abs(fftshift(fft([zeros(1000,1);(hamming(all_labels(ix_labels(j),5) -all_labels(ix_labels(j),4)+1).*data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i))])));
+        if i == 1
+            aac_x_janelas{1, j} = aux;
+        end
+        if i == 2
+            aac_y_janelas{1, j} = aux;
+        end
+        if i == 3
+            aac_z_janelas{1, j} = aux;
+        end
+    end
+end
+figure(3)
+for i=1:numel(ix_labels)
+    N= length(aac_x_janelas{1,i});
+   
+   if (mod(N,2) == 0)
+        f = -Fs/2:Fs/N:Fs/2-Fs/N;
+   else
+        f = -Fs/2+Fs/(2*N):Fs/N:Fs/2-Fs/(2*N);
+    end
+    plot(f, aac_x_janelas{1,i})
+    hold on
 end
