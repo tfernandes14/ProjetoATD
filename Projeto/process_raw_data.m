@@ -1,4 +1,5 @@
 function process_raw_data(expr, usr)
+%TITULO DOS GRAFICOS
 close all
 clc
 Sensors={'ACC_X','ACC_Y','ACC_Z'};
@@ -23,13 +24,12 @@ t=(0:size(data,1)-1)./Fs;
 
 % -------------------- EXERC?CIO 3 --------------------
 
-aac_x = cell(1, numel(ix_labels));
-aac_y = cell(1, numel(ix_labels));
-aac_z = cell(1, numel(ix_labels));
+aac_x = cell(3, numel(ix_labels));
+aac_y = cell(3, numel(ix_labels));
+aac_z = cell(3, numel(ix_labels));
 
 % Fazer um plot de todos os canais (x,y,z)
 figure(1)
-contador=1;
 for i=1:n_plots
     subplot(n_plots,1,i);
     plot(t./60,data(:,i),'k--');
@@ -37,6 +37,7 @@ for i=1:n_plots
     xlabel('Time (min)', 'fontsize', 16, 'fontweight', 'bold');
     ylabel(Sensors{i}, 'fontsize', 16, 'fontweight', 'bold');
     hold on
+    contador = 1;
     for j=1:numel(ix_labels)    % Put activity labels on each sub(???)
         plot(t(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5))./60, data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i))
         if mod(j,2) == 1    % Intercalate labels to avoid superposi(???)
@@ -46,17 +47,19 @@ for i=1:n_plots
         end
         %calcular a fft
         tipo_movimento = all_labels(ix_labels(j),3);
-        if tipo_movimento == 1 || tipo_movimento == 1 || tipo_movimento ==3
-            aux = abs(fftshift(fft(data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i))));
+        if tipo_movimento == 1 || tipo_movimento == 2 || tipo_movimento ==3
+            aux = abs(fftshift(fft(detrend(data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i)))));
             if i == 1
-                aac_x{1, contador} = aux;
+                aac_x{tipo_movimento, contador} = aux;
                 contador=contador+1;
             end
             if i == 2
-                aac_y{1, contador} = aux;
+                aac_y{tipo_movimento, contador} = aux;
+                contador=contador+1;
             end
             if i == 3
-                aac_z{1, contador} = aux;
+                aac_z{tipo_movimento, contador} = aux;
+                contador=contador+1;
             end
             
         end
@@ -68,25 +71,34 @@ end
 % -------------------- EXERC?CIO 4 --------------------
 %4.1
 figure(2)
-for i=1:numel(ix_labels)
-   N= length(aac_x{1,i});
-   if (mod(N,2) == 0)
-        f = -Fs/2:Fs/N:Fs/2-Fs/N;
-   else
-        f = -Fs/2+Fs/(2*N):Fs/N:Fs/2-Fs/(2*N);
-   end
-   plot(f, aac_x{1,i})
-   title('Frequ?ncias da DFT com a janela retangular')
-   hold on
+
+for i=1:3
+    subplot(3,1,i);
+    for j=1:size(aac_x, 2)
+       N= length(aac_x{i,j});
+       if (mod(N,2) == 0)
+            f = -Fs/2:Fs/N:Fs/2-Fs/N;
+       else
+            f = -Fs/2+Fs/(2*N):Fs/N:Fs/2-Fs/(2*N);
+       end
+       plot(f, aac_x{i,j})
+       hold on
+    end
+    title('Frequ?ncias da DFT com a janela retangular')
+    %TITULO DA FIGURA????????????????????????????????
+    %CADA SUBPLOT:WALKING WALKING UP WALKING DOWN
+    
 end
 
 %varias janelas
 
-aac_x_janelas = cell(1, numel(ix_labels));
-aac_y_janelas = cell(1, numel(ix_labels));
-aac_z_janelas = cell(1, numel(ix_labels));
+aac_x_hamming = cell(3, numel(ix_labels));
+aac_y_hamming = cell(3, numel(ix_labels));
+aac_z_hamming = cell(3, numel(ix_labels));
 for i=1:n_plots
-    for j=1:numel(ix_labels)    
+    contador=1;
+    for j=1:numel(ix_labels)   
+
         %fazer a concatena?ao dos zeros estamos a aumentar o padding e
         %assim as curvas tornam-se mais suaves o que permite uma melhor
         %compara??o que ira ser usasda para o relatorio  ps: nao esquecer
@@ -96,38 +108,48 @@ for i=1:n_plots
         %NAO METER OS GRAFICOS TODOS JUNTOS TEMOS DE SEPARA-LOS MAS TAMBEM
         %NAO PERCISAMOS DE MOSTRAR TODOS SO OS DO MOVIMENTO
         tipo_movimento = all_labels(ix_labels(j),3);
-        if tipo_movimento == 1 || tipo_movimento == 1 || tipo_movimento ==3
+        if tipo_movimento == 1 || tipo_movimento == 2 || tipo_movimento ==3
             x=data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i);
-            aux = abs(fftshift(fft([zeros(1000,1);(hamming(all_labels(ix_labels(j),5) -all_labels(ix_labels(j),4)+1).*x)])));
+            aux = abs(fftshift(fft([zeros(1000,1);(hamming(all_labels(ix_labels(j),5) -all_labels(ix_labels(j),4)+1).*detrend(x))])));
             if i == 1
-                aac_x_janelas{1, j} = aux;
+                aac_x_hamming{tipo_movimento, contador} = aux;
+                contador = contador+1;
             end
             if i == 2
-                aac_y_janelas{1, j} = aux;
+                aac_y_hamming{tipo_movimento, contador} = aux;
+                contador = contador+1;
             end
             if i == 3
-                aac_z_janelas{1, j} = aux;
+                aac_z_hamming{tipo_movimento, contador} = aux;
+                contador = contador+1;
             end
         end
     end
 end
 
 figure(3)
-for i=1:numel(ix_labels)
-    N= length(aac_x_janelas{1,i});
-   
-   if (mod(N,2) == 0)
-        f = -Fs/2:Fs/N:Fs/2-Fs/N;
-   else
-        f = -Fs/2+Fs/(2*N):Fs/N:Fs/2-Fs/(2*N);
+for i=1:3
+    subplot(3,1,i);
+    for j=1:size(aac_x_hamming, 2)
+        N= length(aac_x_hamming{i,j});
+
+       if (mod(N,2) == 0)
+            f = -Fs/2:Fs/N:Fs/2-Fs/N;
+       else
+            f = -Fs/2+Fs/(2*N):Fs/N:Fs/2-Fs/(2*N);
+        end
+        plot(f, aac_x_hamming{i,j})
+        title('Janela de Hamming')
+        hold on
     end
-    plot(f, aac_x_janelas{1,i})
-    title('Janela de Hamming')
-    hold on
 end
 
 figure(4)
+aac_x_hann = cell(3, numel(ix_labels));
+aac_y_hann = cell(3, numel(ix_labels));
+aac_z_hann= cell(3, numel(ix_labels));
 for i=1:n_plots
+    contador = 1;
     for j=1:numel(ix_labels)    
         %fazer a concatena?ao dos zeros estamos a aumentar o padding e
         %assim as curvas tornam-se mais suaves o que permite uma melhor
@@ -138,36 +160,45 @@ for i=1:n_plots
         %NAO METER OS GRAFICOS TODOS JUNTOS TEMOS DE SEPARA-LOS MAS TAMBEM
         %NAO PERCISAMOS DE MOSTRAR TODOS SO OS DO MOVIMENTO
         tipo_movimento = all_labels(ix_labels(j),3);
-        if tipo_movimento == 1 || tipo_movimento == 1 || tipo_movimento ==3
-            aux = abs(fftshift(fft([zeros(1000,1);(hann(all_labels(ix_labels(j),5) -all_labels(ix_labels(j),4)+1).*data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i))])));
+        if tipo_movimento == 1 || tipo_movimento == 2 || tipo_movimento ==3
+            aux = abs(fftshift(fft([zeros(1000,1);(hann(all_labels(ix_labels(j),5) -all_labels(ix_labels(j),4)+1).*detrend(data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i)))])));
             if i == 1
-                aac_x_janelas{1, j} = aux;
+                aac_x_hann{tipo_movimento, j} = aux;
+                contador = contador+1;
             end
             if i == 2
-                aac_y_janelas{1, j} = aux;
+                aac_y_hann{tipo_movimento, j} = aux;
+                contador = contador+1;
             end
             if i == 3
-                aac_z_janelas{1, j} = aux;
+                aac_z_hann{tipo_movimento, j} = aux;
+                contador = contador+1;
             end
         end
     end
 end
+for i=1:3
+    subplot(3,1,i);
+    for j=1:size(aac_x_hann, 2)
+        N= length(aac_x_hann{i,j});
 
-for i=1:numel(ix_labels)
-    N= length(aac_x_janelas{1,i});
-   
-   if (mod(N,2) == 0)
-        f = -Fs/2:Fs/N:Fs/2-Fs/N;
-   else
-        f = -Fs/2+Fs/(2*N):Fs/N:Fs/2-Fs/(2*N);
+       if (mod(N,2) == 0)
+            f = -Fs/2:Fs/N:Fs/2-Fs/N;
+       else
+            f = -Fs/2+Fs/(2*N):Fs/N:Fs/2-Fs/(2*N);
+        end
+        plot(f, aac_x_hann{i,j})
+        title('Janela de Hann')
+        hold on
     end
-    plot(f, aac_x_janelas{1,i})
-    title('Janela de Hann')
-    hold on
 end
 
 figure(5)
+aac_x_blackman = cell(3, numel(ix_labels));
+aac_y_blackman = cell(3, numel(ix_labels));
+aac_z_blackman = cell(3, numel(ix_labels));
 for i=1:n_plots
+    contador = 1;
     for j=1:numel(ix_labels)    
         %fazer a concatena?ao dos zeros estamos a aumentar o padding e
         %assim as curvas tornam-se mais suaves o que permite uma melhor
@@ -178,42 +209,61 @@ for i=1:n_plots
         %NAO METER OS GRAFICOS TODOS JUNTOS TEMOS DE SEPARA-LOS MAS TAMBEM
         %NAO PERCISAMOS DE MOSTRAR TODOS SO OS DO MOVIMENTO
         tipo_movimento = all_labels(ix_labels(j),3);
-        if tipo_movimento == 1 || tipo_movimento == 1 || tipo_movimento ==3
-            aux = abs(fftshift(fft([zeros(1000,1);(blackman(all_labels(ix_labels(j),5) -all_labels(ix_labels(j),4)+1).*data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i))])));
+        if tipo_movimento == 1 || tipo_movimento == 2 || tipo_movimento ==3
+            aux = abs(fftshift(fft([zeros(1000,1);(blackman(all_labels(ix_labels(j),5) -all_labels(ix_labels(j),4)+1).*detrend(data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i)))])));
             if i == 1
-                aac_x_janelas{1, j} = aux;
+                aac_x_blackman{tipo_movimento, j} = aux;
+                contador = contador+1;
             end
             if i == 2
-                aac_y_janelas{1, j} = aux;
+                aac_y_blackman{tipo_movimento, j} = aux;
+                contador = contador+1;
             end
             if i == 3
-                aac_z_janelas{1, j} = aux;
+                aac_z_blackman{tipo_movimento, j} = aux;
+                contador = contador+1;
             end
         end
     end
 end
 
-for i=1:numel(ix_labels)
-    N= length(aac_x_janelas{1,i});
-   
-   if (mod(N,2) == 0)
-        f = -Fs/2:Fs/N:Fs/2-Fs/N;
-   else
-        f = -Fs/2+Fs/(2*N):Fs/N:Fs/2-Fs/(2*N);
-   end
-    
-    plot(f, aac_x_janelas{1,i})
-    title('Janela de Blackman')
-    hold on
+for i=1:3
+    subplot(3,1,i);
+    for j=1:size(aac_x_blackman, 2)
+        N= length(aac_x_blackman{i,j});
+
+       if (mod(N,2) == 0)
+            f = -Fs/2:Fs/N:Fs/2-Fs/N;
+       else
+            f = -Fs/2+Fs/(2*N):Fs/N:Fs/2-Fs/(2*N);
+       end
+
+        plot(f, aac_x_blackman{i,j})
+        title('Janela de Blackman')
+        hold on
+    end
 end
 
 
 
 %4.2
-disp('pks:')
-for i=1:numel(ix_labels)
-    pks = findpeaks(aac_x_janelas{1,i});   
-end
-disp(pks)
 
+disp('pks:')
+for i=1:3
+    if i==1
+        disp('W')
+    end
+    if i==2
+        disp('WU')
+    end
+    if i==3
+        disp('WD')
+    end
+    for j=1:size(aac_x_blackman, 2)
+        pks = findpeaks(aac_x_blackman{i,j});
+        disp(i)
+        disp(max(pks))
+        disp(max(pks(pks<max(pks)))) %segundo maior
+    end
+end
 
