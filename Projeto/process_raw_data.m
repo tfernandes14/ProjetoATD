@@ -37,7 +37,9 @@ for i=1:n_plots
     xlabel('Time (min)', 'fontsize', 16, 'fontweight', 'bold');
     ylabel(Sensors{i}, 'fontsize', 16, 'fontweight', 'bold');
     hold on
-    contador = 1;
+    contadorW = 1;
+    contadorWU = 1;
+    contadorWD = 1;
     for j=1:numel(ix_labels)    % Put activity labels on each sub(???)
         plot(t(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5))./60, data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i))
         if mod(j,2) == 1    % Intercalate labels to avoid superposi(???)
@@ -50,16 +52,46 @@ for i=1:n_plots
         if tipo_movimento == 1 || tipo_movimento == 2 || tipo_movimento ==3
             aux = abs(fftshift(fft(detrend(data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i)))));
             if i == 1
-                aac_x{tipo_movimento, contador} = aux;
-                contador=contador+1;
+                if tipo_movimento == 1
+                    aac_x{tipo_movimento, contadorW} = aux;
+                    contadorW = contadorW+1;
+                end
+                if tipo_movimento == 2
+                    aac_x{tipo_movimento, contadorWU} = aux;
+                    contadorWU = contadorWU+1;
+                end
+                if tipo_movimento == 3
+                    aac_x{tipo_movimento, contadorWD} = aux;
+                    contadorWD = contadorWD+1;
+                end
             end
             if i == 2
-                aac_y{tipo_movimento, contador} = aux;
-                contador=contador+1;
+                if tipo_movimento == 1
+                    aac_y{tipo_movimento, contadorW} = aux;
+                    contadorW = contadorW+1;
+                end
+                if tipo_movimento == 2
+                    aac_y{tipo_movimento, contadorWU} = aux;
+                    contadorWU = contadorWU+1;
+                end
+                if tipo_movimento == 3
+                    aac_y{tipo_movimento, contadorWD} = aux;
+                    contadorWD = contadorWD+1;
+                end
             end
             if i == 3
-                aac_z{tipo_movimento, contador} = aux;
-                contador=contador+1;
+                if tipo_movimento == 1
+                    aac_z{tipo_movimento, contadorW} = aux;
+                    contadorW = contadorW+1;
+                end
+                if tipo_movimento == 2
+                    aac_z{tipo_movimento, contadorWU} = aux;
+                    contadorWU = contadorWU+1;
+                end
+                if tipo_movimento == 3
+                    aac_z{tipo_movimento, contadorWD} = aux;
+                    contadorWD = contadorWD+1;
+                end
             end
             
         end
@@ -96,7 +128,9 @@ aac_x_hamming = cell(3, numel(ix_labels));
 aac_y_hamming = cell(3, numel(ix_labels));
 aac_z_hamming = cell(3, numel(ix_labels));
 for i=1:n_plots
-    contador=1;
+    contadorW = 1;
+    contadorWU = 1;
+    contadorWD = 1;
     for j=1:numel(ix_labels)   
 
         %fazer a concatena?ao dos zeros estamos a aumentar o padding e
@@ -112,16 +146,46 @@ for i=1:n_plots
             x=data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i);
             aux = abs(fftshift(fft([zeros(1000,1);(hamming(all_labels(ix_labels(j),5) -all_labels(ix_labels(j),4)+1).*detrend(x))])));
             if i == 1
-                aac_x_hamming{tipo_movimento, contador} = aux;
-                contador = contador+1;
+                if tipo_movimento == 1
+                    aac_x_hamming{tipo_movimento, contadorW} = aux;
+                    contadorW = contadorW+1;
+                end
+                if tipo_movimento == 2
+                    aac_x_hamming{tipo_movimento, contadorWU} = aux;
+                    contadorWU = contadorWU+1;
+                end
+                if tipo_movimento == 3
+                    aac_x_hamming{tipo_movimento, contadorWD} = aux;
+                    contadorWD = contadorWD+1;
+                end
             end
             if i == 2
-                aac_y_hamming{tipo_movimento, contador} = aux;
-                contador = contador+1;
+                if tipo_movimento == 1
+                    aac_y_hamming{tipo_movimento, contadorW} = aux;
+                    contadorW = contadorW+1;
+                end
+                if tipo_movimento == 2
+                    aac_y_hamming{tipo_movimento, contadorWU} = aux;
+                    contadorWU = contadorWU+1;
+                end
+                if tipo_movimento == 3
+                    aac_y_hamming{tipo_movimento, contadorWD} = aux;
+                    contadorWD = contadorWD+1;
+                end
             end
             if i == 3
-                aac_z_hamming{tipo_movimento, contador} = aux;
-                contador = contador+1;
+                if tipo_movimento == 1
+                    aac_z_hamming{tipo_movimento, contadorW} = aux;
+                    contadorW = contadorW+1;
+                end
+                if tipo_movimento == 2
+                    aac_z_hamming{tipo_movimento, contadorWU} = aux;
+                    contadorWU = contadorWU+1;
+                end
+                if tipo_movimento == 3
+                    aac_x_hamming{tipo_movimento, contadorWD} = aux;
+                    contadorWD = contadorWD+1;
+                end
             end
         end
     end
@@ -149,7 +213,9 @@ aac_x_hann = cell(3, numel(ix_labels));
 aac_y_hann = cell(3, numel(ix_labels));
 aac_z_hann= cell(3, numel(ix_labels));
 for i=1:n_plots
-    contador = 1;
+    contadorW = 1;
+    contadorWU = 1;
+    contadorWD = 1;
     for j=1:numel(ix_labels)    
         %fazer a concatena?ao dos zeros estamos a aumentar o padding e
         %assim as curvas tornam-se mais suaves o que permite uma melhor
@@ -163,16 +229,46 @@ for i=1:n_plots
         if tipo_movimento == 1 || tipo_movimento == 2 || tipo_movimento ==3
             aux = abs(fftshift(fft([zeros(1000,1);(hann(all_labels(ix_labels(j),5) -all_labels(ix_labels(j),4)+1).*detrend(data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i)))])));
             if i == 1
-                aac_x_hann{tipo_movimento, j} = aux;
-                contador = contador+1;
+                if tipo_movimento == 1
+                    aac_x_hann{tipo_movimento, contadorW} = aux;
+                    contadorW = contadorW+1;
+                end
+                if tipo_movimento == 2
+                    aac_x_hann{tipo_movimento, contadorWU} = aux;
+                    contadorWU = contadorWU+1;
+                end
+                if tipo_movimento == 3
+                    aac_x_hann{tipo_movimento, contadorWD} = aux;
+                    contadorWD = contadorWD+1;
+                end
             end
             if i == 2
-                aac_y_hann{tipo_movimento, j} = aux;
-                contador = contador+1;
+                if tipo_movimento == 1
+                    aac_y_hann{tipo_movimento, contadorW} = aux;
+                    contadorW = contadorW+1;
+                end
+                if tipo_movimento == 2
+                    aac_y_hann{tipo_movimento, contadorWU} = aux;
+                    contadorWU = contadorWU+1;
+                end
+                if tipo_movimento == 3
+                    aac_y_hann{tipo_movimento, contadorWD} = aux;
+                    contadorWD = contadorWD+1;
+                end
             end
             if i == 3
-                aac_z_hann{tipo_movimento, j} = aux;
-                contador = contador+1;
+                if tipo_movimento == 1
+                    aac_z_hann{tipo_movimento, contadorW} = aux;
+                    contadorW = contadorW+1;
+                end
+                if tipo_movimento == 2
+                    aac_z_hann{tipo_movimento, contadorWU} = aux;
+                    contadorWU = contadorWU+1;
+                end
+                if tipo_movimento == 3
+                    aac_z_hann{tipo_movimento, contadorWD} = aux;
+                    contadorWD = contadorWD+1;
+                end
             end
         end
     end
@@ -198,7 +294,9 @@ aac_x_blackman = cell(3, numel(ix_labels));
 aac_y_blackman = cell(3, numel(ix_labels));
 aac_z_blackman = cell(3, numel(ix_labels));
 for i=1:n_plots
-    contador = 1;
+    contadorW = 1;
+    contadorWU = 1;
+    contadorWD = 1;
     for j=1:numel(ix_labels)    
         %fazer a concatena?ao dos zeros estamos a aumentar o padding e
         %assim as curvas tornam-se mais suaves o que permite uma melhor
@@ -212,16 +310,46 @@ for i=1:n_plots
         if tipo_movimento == 1 || tipo_movimento == 2 || tipo_movimento ==3
             aux = abs(fftshift(fft([zeros(1000,1);(blackman(all_labels(ix_labels(j),5) -all_labels(ix_labels(j),4)+1).*detrend(data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i)))])));
             if i == 1
-                aac_x_blackman{tipo_movimento, j} = aux;
-                contador = contador+1;
+                if tipo_movimento == 1
+                    aac_x_blackman{tipo_movimento, contadorW} = aux;
+                    contadorW = contadorW+1;
+                end
+                if tipo_movimento == 2
+                    aac_x_blackman{tipo_movimento, contadorWU} = aux;
+                    contadorWU = contadorWU+1;
+                end
+                if tipo_movimento == 3
+                    aac_x_blackman{tipo_movimento, contadorWD} = aux;
+                    contadorWD = contadorWD+1;
+                end
             end
             if i == 2
-                aac_y_blackman{tipo_movimento, j} = aux;
-                contador = contador+1;
+                if tipo_movimento == 1
+                    aac_y_blackman{tipo_movimento, contadorW} = aux;
+                    contadorW = contadorW+1;
+                end
+                if tipo_movimento == 2
+                    aac_y_blackman{tipo_movimento, contadorWU} = aux;
+                    contadorWU = contadorWU+1;
+                end
+                if tipo_movimento == 3
+                    aac_y_blackman{tipo_movimento, contadorWD} = aux;
+                    contadorWD = contadorWD+1;
+                end
             end
             if i == 3
-                aac_z_blackman{tipo_movimento, j} = aux;
-                contador = contador+1;
+                if tipo_movimento == 1
+                    aac_z_blackman{tipo_movimento, contadorW} = aux;
+                    contadorW = contadorW+1;
+                end
+                if tipo_movimento == 2
+                    aac_z_blackman{tipo_movimento, contadorWU} = aux;
+                    contadorWU = contadorWU+1;
+                end
+                if tipo_movimento == 3
+                    aac_z_blackman{tipo_movimento, contadorWD} = aux;
+                    contadorWD = contadorWD+1;
+                end
             end
         end
     end
@@ -248,22 +376,48 @@ end
 
 %4.2
 
-disp('pks:')
+% disp('pks:')
+% disp('W')
+% for j=1:contadorW-1
+%     pks = findpeaks(aac_x_blackman{1,j});
+%     disp(j)
+%     disp(max(pks))
+%     disp(max(pks(pks<max(pks)))) %segundo maior
+% end
+% disp('WU')
+% for j=1:contadorWU-1
+%     pks = findpeaks(aac_x_blackman{2,j});
+%     disp(j)
+%     disp(max(pks))
+%     disp(max(pks(pks<max(pks)))) %segundo maior
+% end
+% disp('WD')
+% for j=1:contadorWD-1
+%     pks = findpeaks(aac_x_blackman{3,j});
+%     disp(j)
+%     disp(max(pks))
+%     disp(max(pks(pks<max(pks)))) %segundo maior
+% end
 for i=1:3
+    j=1;
     if i==1
-        disp('W')
+        disp('Walking')
     end
     if i==2
-        disp('WU')
+        disp('Walking Up')
     end
     if i==3
-        disp('WD')
+        disp('Walking Down')
     end
-    for j=1:size(aac_x_blackman, 2)
+    while(isempty(aac_x_blackman{i,j})~=1)
         pks = findpeaks(aac_x_blackman{i,j});
-        disp(i)
-        disp(max(pks))
-        disp(max(pks(pks<max(pks)))) %segundo maior
+        disp(j)
+        %disp(max(pks))
+        %disp(max(pks(pks<max(pks)))) %segundo maior
+        disp(pks(1))%primeiro valor
+        disp(pks(1)*60)%primeiro valor do pico *60
+        j=j+1;
     end
 end
 
+%(pks[1]*60)
