@@ -50,7 +50,7 @@ for i=1:n_plots
         %calcular a fft
         tipo_movimento = all_labels(ix_labels(j),3);
         if tipo_movimento == 1 || tipo_movimento == 2 || tipo_movimento ==3
-            aux = abs(fftshift(fft(detrend(data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i)))));
+            aux = abs(fftshift(fft([zeros(1000,1);(detrend(data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i)))])));
             if i == 1
                 if tipo_movimento == 1
                     aac_x{tipo_movimento, contadorW} = aux;
@@ -398,26 +398,35 @@ end
 %     disp(max(pks))
 %     disp(max(pks(pks<max(pks)))) %segundo maior
 % end
-for i=1:3
-    j=1;
-    if i==1
-        disp('Walking')
-    end
-    if i==2
-        disp('Walking Up')
-    end
-    if i==3
-        disp('Walking Down')
-    end
-    while(isempty(aac_x_blackman{i,j})~=1)
-        pks = findpeaks(aac_x_blackman{i,j});
-        disp(j)
-        %disp(max(pks))
-        %disp(max(pks(pks<max(pks)))) %segundo maior
-        disp(pks(1))%primeiro valor
-        disp(pks(1)*60)%primeiro valor do pico *60
-        j=j+1;
-    end
-end
-
 %(pks[1]*60)
+
+disp(txtFile)
+
+disp('retangular x');
+passos(aac_x);
+disp('retangular y')
+passos(aac_y);
+disp('retangular z')
+passos(aac_z)
+
+disp('hamming x');
+passos(aac_x_hamming);
+disp('hamming y')
+passos(aac_y_hamming);
+disp('hamming z')
+passos(aac_z_hamming)
+
+disp('hann x');
+passos(aac_x_hann);
+disp('hann y')
+passos(aac_y_hann);
+disp('hann z')
+passos(aac_x_hann)
+
+disp('blackman x');
+passos(aac_x_blackman);
+disp('blackman y')
+passos(aac_y_blackman);
+disp('blackman z')
+passos(aac_z_blackman)
+
