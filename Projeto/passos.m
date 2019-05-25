@@ -1,7 +1,7 @@
 function passos(valores, n)
     movimentos_dinamicos = 3;
     passos_val = cell(3, n);
-    contador = [1 1 1];
+    contador = ones(1, 3);
     media = zeros(1,3);
     for i=1:movimentos_dinamicos
         j=1;

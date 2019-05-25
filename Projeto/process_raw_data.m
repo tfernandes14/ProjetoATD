@@ -1,7 +1,5 @@
-function process_raw_data(expr, usr)
+function [aac_x]=process_raw_data(expr, usr)
     %TITULO DOS GRAFICOS
-    close all
-    clc
     Sensors={'ACC_X','ACC_Y','ACC_Z'};
     activities={'W','WU','WD','S','ST','L','STSit','SitTS','SitTL','LTSit','STL','LTS'};
     Fs=50;  % Frequencia da amostragem
@@ -20,7 +18,7 @@ function process_raw_data(expr, usr)
     % Cria um vetor tempo
     t=(0:size(data,1)-1)./Fs;
 
-    [n_points,n_plots]=size(data);
+    [~,n_plots]=size(data);
 
     % -------------------- EXERC?CIO 3 --------------------
 
@@ -37,7 +35,7 @@ function process_raw_data(expr, usr)
         xlabel('Time (min)', 'fontsize', 16, 'fontweight', 'bold');
         ylabel(Sensors{i}, 'fontsize', 16, 'fontweight', 'bold');
         hold on
-        contador = [1 1 1 1 1 1 1 1 1 1 1 1];
+        contador = ones(1, 12);
         for j=1:numel(ix_labels)    % Put activity labels on each sub(???)
             plot(t(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5))./60, data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i))
             if mod(j,2) == 1    % Intercalate labels to avoid superposi(???)
@@ -67,7 +65,7 @@ function process_raw_data(expr, usr)
 
     % -------------------- EXERC?CIO 4 --------------------
     %4.1
-    figure(2)
+    figure('Name','Frequencias da DFT com a janela retangular')
     plot_windows(n_plots, aac_x, aac_y, aac_z, Fs)
 
     %varias janelas
@@ -77,7 +75,7 @@ function process_raw_data(expr, usr)
     aac_z_hamming = cell(12, numel(ix_labels));
 
     for i=1:n_plots
-        contador = [1 1 1 1 1 1 1 1 1 1 1 1];
+        contador = ones(1, 12);
         for j=1:numel(ix_labels)   
 
             %fazer a concatena?ao dos zeros estamos a aumentar o padding e
@@ -106,7 +104,7 @@ function process_raw_data(expr, usr)
         end
     end
 
-    figure(3)
+    figure('Name','Janela de Hamming')
     plot_windows(n_plots, aac_x_hamming, aac_y_hamming, aac_z_hamming, Fs)
 
 
@@ -115,7 +113,7 @@ function process_raw_data(expr, usr)
     aac_z_hann= cell(12, numel(ix_labels));
 
     for i=1:n_plots
-        contador = [1 1 1 1 1 1 1 1 1 1 1 1];
+        contador = ones(1, 12);
         for j=1:numel(ix_labels)    
             %fazer a concatena?ao dos zeros estamos a aumentar o padding e
             %assim as curvas tornam-se mais suaves o que permite uma melhor
@@ -142,7 +140,7 @@ function process_raw_data(expr, usr)
         end
     end
 
-    figure(4)
+    figure('Name','Janela de Hann')
     plot_windows(n_plots, aac_x_hann, aac_y_hann, aac_z_hann, Fs)
 
     aac_x_blackman = cell(12, numel(ix_labels));
@@ -150,7 +148,7 @@ function process_raw_data(expr, usr)
     aac_z_blackman = cell(12, numel(ix_labels));
 
     for i=1:n_plots
-        contador = [1 1 1 1 1 1 1 1 1 1 1 1];
+        contador = ones(1, 12);
         for j=1:numel(ix_labels)    
             %fazer a concatena?ao dos zeros estamos a aumentar o padding e
             %assim as curvas tornam-se mais suaves o que permite uma melhor
@@ -174,7 +172,7 @@ function process_raw_data(expr, usr)
         end
     end
 
-    figure(5)
+    figure('Name','Janela de Blackman')
     plot_windows(n_plots, aac_x_blackman, aac_y_blackman, aac_z_blackman, Fs)
 
 
