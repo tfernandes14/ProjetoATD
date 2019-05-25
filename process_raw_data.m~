@@ -1,4 +1,4 @@
-function [aac_x, aac_y, aac_z, aac_x_hamming, aac_y_hamming, aac_z_hamming, aac_x_hann, aac_y_hann, aac_z_hann, aac_x_blackman, aac_y_blackman, aac_z_blackman] = process_raw_data_novo(expr, usr)
+function [aac_x]=process_raw_data(expr, usr)
     %TITULO DOS GRAFICOS
     Sensors={'ACC_X','ACC_Y','ACC_Z'};
     activities={'W','WU','WD','S','ST','L','STSit','SitTS','SitTL','LTSit','STL','LTS'};
@@ -65,7 +65,7 @@ function [aac_x, aac_y, aac_z, aac_x_hamming, aac_y_hamming, aac_z_hamming, aac_
 
     % -------------------- EXERC?CIO 4 --------------------
     %4.1
-    figure('Name','Frequencias da DFT com a janela retangular')
+    figure(2,'Name','')
     plot_windows(n_plots, aac_x, aac_y, aac_z, Fs)
 
     %varias janelas
@@ -104,7 +104,7 @@ function [aac_x, aac_y, aac_z, aac_x_hamming, aac_y_hamming, aac_z_hamming, aac_
         end
     end
 
-    figure('Name','Janela de Hamming')
+    figure(3)
     plot_windows(n_plots, aac_x_hamming, aac_y_hamming, aac_z_hamming, Fs)
 
 
@@ -140,7 +140,7 @@ function [aac_x, aac_y, aac_z, aac_x_hamming, aac_y_hamming, aac_z_hamming, aac_
         end
     end
 
-    figure('Name','Janela de Hann')
+    figure(4)
     plot_windows(n_plots, aac_x_hann, aac_y_hann, aac_z_hann, Fs)
 
     aac_x_blackman = cell(12, numel(ix_labels));
@@ -172,7 +172,7 @@ function [aac_x, aac_y, aac_z, aac_x_hamming, aac_y_hamming, aac_z_hamming, aac_
         end
     end
 
-    figure('Name','Janela de Blackman')
+    figure(5)
     plot_windows(n_plots, aac_x_blackman, aac_y_blackman, aac_z_blackman, Fs)
 
 
@@ -206,11 +206,5 @@ function [aac_x, aac_y, aac_z, aac_x_hamming, aac_y_hamming, aac_z_hamming, aac_
     disp('blackman y')
     passos(aac_y_blackman, numel(ix_labels));
     disp('blackman z')
-    passos(aac_z_blackman, numel(ix_labels));
-    
-    %4.3 4.4 4.5
-
-    esta(aac_x, 6);
-    esta(aac_y, 6);
-    esta(aac_z, 6);
+    passos(aac_z_blackman, numel(ix_labels))
 end
