@@ -50,7 +50,7 @@ for i=1:n_plots
         %calcular a fft
         tipo_movimento = all_labels(ix_labels(j),3);
         if tipo_movimento == 1 || tipo_movimento == 2 || tipo_movimento ==3
-            aux = abs(fftshift(fft([zeros(1000,1);(detrend(data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i)))])));
+            aux = abs(fftshift(fft(detrend(data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i)))));
             if i == 1
                 if tipo_movimento == 1
                     aac_x{tipo_movimento, contadorW} = aux;
@@ -103,30 +103,14 @@ end
 % -------------------- EXERC?CIO 4 --------------------
 %4.1
 figure(2)
-
-for i=1:3
-    subplot(3,1,i);
-    for j=1:size(aac_x, 2)
-       N= length(aac_x{i,j});
-       if (mod(N,2) == 0)
-            f = -Fs/2:Fs/N:Fs/2-Fs/N;
-       else
-            f = -Fs/2+Fs/(2*N):Fs/N:Fs/2-Fs/(2*N);
-       end
-       plot(f, aac_x{i,j})
-       hold on
-    end
-    title('Frequ?ncias da DFT com a janela retangular')
-    %TITULO DA FIGURA????????????????????????????????
-    %CADA SUBPLOT:WALKING WALKING UP WALKING DOWN
-    
-end
+plot_windows(n_plots, aac_x, aac_y, aac_z, Fs)
 
 %varias janelas
 
 aac_x_hamming = cell(3, numel(ix_labels));
 aac_y_hamming = cell(3, numel(ix_labels));
 aac_z_hamming = cell(3, numel(ix_labels));
+
 for i=1:n_plots
     contadorW = 1;
     contadorWU = 1;
@@ -183,7 +167,7 @@ for i=1:n_plots
                     contadorWU = contadorWU+1;
                 end
                 if tipo_movimento == 3
-                    aac_x_hamming{tipo_movimento, contadorWD} = aux;
+                    aac_z_hamming{tipo_movimento, contadorWD} = aux;
                     contadorWD = contadorWD+1;
                 end
             end
@@ -192,26 +176,13 @@ for i=1:n_plots
 end
 
 figure(3)
-for i=1:3
-    subplot(3,1,i);
-    for j=1:size(aac_x_hamming, 2)
-        N= length(aac_x_hamming{i,j});
+plot_windows(n_plots, aac_x_hamming, aac_y_hamming, aac_z_hamming, Fs)
 
-       if (mod(N,2) == 0)
-            f = -Fs/2:Fs/N:Fs/2-Fs/N;
-       else
-            f = -Fs/2+Fs/(2*N):Fs/N:Fs/2-Fs/(2*N);
-        end
-        plot(f, aac_x_hamming{i,j})
-        title('Janela de Hamming')
-        hold on
-    end
-end
 
-figure(4)
 aac_x_hann = cell(3, numel(ix_labels));
 aac_y_hann = cell(3, numel(ix_labels));
 aac_z_hann= cell(3, numel(ix_labels));
+
 for i=1:n_plots
     contadorW = 1;
     contadorWU = 1;
@@ -273,26 +244,14 @@ for i=1:n_plots
         end
     end
 end
-for i=1:3
-    subplot(3,1,i);
-    for j=1:size(aac_x_hann, 2)
-        N= length(aac_x_hann{i,j});
 
-       if (mod(N,2) == 0)
-            f = -Fs/2:Fs/N:Fs/2-Fs/N;
-       else
-            f = -Fs/2+Fs/(2*N):Fs/N:Fs/2-Fs/(2*N);
-        end
-        plot(f, aac_x_hann{i,j})
-        title('Janela de Hann')
-        hold on
-    end
-end
+figure(4)
+plot_windows(n_plots, aac_x_hann, aac_y_hann, aac_z_hann, Fs)
 
-figure(5)
 aac_x_blackman = cell(3, numel(ix_labels));
 aac_y_blackman = cell(3, numel(ix_labels));
 aac_z_blackman = cell(3, numel(ix_labels));
+
 for i=1:n_plots
     contadorW = 1;
     contadorWU = 1;
@@ -303,9 +262,6 @@ for i=1:n_plots
         %compara??o que ira ser usasda para o relatorio  ps: nao esquecer
         %que ? necessario fazer ? dft tambem a comcatena?ao do array de
         %zeros como mostra o exemplo abaixo
-        
-        %NAO METER OS GRAFICOS TODOS JUNTOS TEMOS DE SEPARA-LOS MAS TAMBEM
-        %NAO PERCISAMOS DE MOSTRAR TODOS SO OS DO MOVIMENTO
         tipo_movimento = all_labels(ix_labels(j),3);
         if tipo_movimento == 1 || tipo_movimento == 2 || tipo_movimento ==3
             aux = abs(fftshift(fft([zeros(1000,1);(blackman(all_labels(ix_labels(j),5) -all_labels(ix_labels(j),4)+1).*detrend(data(all_labels(ix_labels(j),4):all_labels(ix_labels(j),5),i)))])));
@@ -355,23 +311,8 @@ for i=1:n_plots
     end
 end
 
-for i=1:3
-    subplot(3,1,i);
-    for j=1:size(aac_x_blackman, 2)
-        N= length(aac_x_blackman{i,j});
-
-       if (mod(N,2) == 0)
-            f = -Fs/2:Fs/N:Fs/2-Fs/N;
-       else
-            f = -Fs/2+Fs/(2*N):Fs/N:Fs/2-Fs/(2*N);
-       end
-
-        plot(f, aac_x_blackman{i,j})
-        title('Janela de Blackman')
-        hold on
-    end
-end
-
+figure(5)
+plot_windows(n_plots, aac_x_blackman, aac_y_blackman, aac_z_blackman, Fs)
 
 
 %4.2
@@ -429,4 +370,3 @@ disp('blackman y')
 passos(aac_y_blackman);
 disp('blackman z')
 passos(aac_z_blackman)
-
