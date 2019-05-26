@@ -1,8 +1,8 @@
-function passos(valores, n)
+function [media]=passos(valores, n)
     movimentos_dinamicos = 3;
     passos_val = cell(3, n);
     contador = ones(1, 3);
-    media = zeros(1,3);
+    media = zeros(3,1);
     for i=1:movimentos_dinamicos
         j=1;
 %         if i==1
@@ -30,7 +30,7 @@ function passos(valores, n)
             soma = soma+passos_val{i,j};
             j = j+1;
         end
-        media(i)= soma/j;
+        media(i,1)= soma/j;
     end
   media
 end

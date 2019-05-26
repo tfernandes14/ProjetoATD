@@ -30,15 +30,7 @@ medias = process_raw_data(Expr{1,size(Expr,2)}, User{1,size(User,2)}, medias, j)
 
 for i=1:4
     for j=1:3
-        soma=0;
-        for k=1:3
-            for l=1:10
-                soma = soma + medias{i,j}(k,l);
-            end
-            desvio = std(medias{i,j}(k,:));
-            desvio
-            soma = soma/10;
-            soma
-        end
+        for
+        medias{i,j}= medias{i,j}./10;
     end
 end

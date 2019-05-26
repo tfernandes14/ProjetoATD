@@ -1,4 +1,4 @@
-function [aac_x, aac_y, aac_z, aac_x_hamming, aac_y_hamming, aac_z_hamming, aac_x_hann, aac_y_hann, aac_z_hann, aac_x_blackman, aac_y_blackman, aac_z_blackman] = process_raw_data_novo(expr, usr)
+function [medias] = process_raw_data(expr, usr, medias, pos)
     %TITULO DOS GRAFICOS
     Sensors={'ACC_X','ACC_Y','ACC_Z'};
     activities={'W','WU','WD','S','ST','L','STSit','SitTS','SitTL','LTSit','STL','LTS'};
@@ -27,7 +27,7 @@ function [aac_x, aac_y, aac_z, aac_x_hamming, aac_y_hamming, aac_z_hamming, aac_
     aac_z = cell(12, numel(ix_labels));
 
     % Fazer um plot de todos os canais (x,y,z)
-    figure(1)
+    figure('Name', txtFile)
     for i=1:n_plots
         subplot(n_plots,1,i);
         plot(t./60,data(:,i),'k--');
@@ -181,36 +181,38 @@ function [aac_x, aac_y, aac_z, aac_x_hamming, aac_y_hamming, aac_z_hamming, aac_
     disp(txtFile)
 
     disp('retangular x');
-    passos(aac_x, numel(ix_labels));
+    medias{1,1}(:,pos) = passos(aac_x, numel(ix_labels));
     disp('retangular y')
-    passos(aac_y, numel(ix_labels));
+    medias{1,2}(:,pos) = passos(aac_y, numel(ix_labels));
     disp('retangular z')
-    passos(aac_z, numel(ix_labels))
+    medias{1,3}(:,pos) = passos(aac_z, numel(ix_labels));
 
     disp('hamming x');
-    passos(aac_x_hamming, numel(ix_labels));
+    medias{2,1}(:,pos) = passos(aac_x_hamming, numel(ix_labels));
     disp('hamming y')
-    passos(aac_y_hamming, numel(ix_labels));
+    medias{2,2}(:,pos) = passos(aac_y_hamming, numel(ix_labels));
     disp('hamming z')
-    passos(aac_z_hamming, numel(ix_labels))
+    medias{2,3}(:,pos) = passos(aac_z_hamming, numel(ix_labels));
 
     disp('hann x');
-    passos(aac_x_hann, numel(ix_labels));
+    medias{3,1}(:,pos) = passos(aac_x_hann, numel(ix_labels));
     disp('hann y')
-    passos(aac_y_hann, numel(ix_labels));
+    medias{3,2}(:,pos) = passos(aac_y_hann, numel(ix_labels));
     disp('hann z')
-    passos(aac_x_hann, numel(ix_labels))
+    medias{3,3}(:,pos) = passos(aac_x_hann, numel(ix_labels));
 
     disp('blackman x');
-    passos(aac_x_blackman, numel(ix_labels));
+    medias{4,1}(:,pos) = passos(aac_x_blackman, numel(ix_labels));
     disp('blackman y')
-    passos(aac_y_blackman, numel(ix_labels));
+    medias{4,2}(:,pos) = passos(aac_y_blackman, numel(ix_labels));
     disp('blackman z')
-    passos(aac_z_blackman, numel(ix_labels));
-    
+    medias{4,3}(:,pos) = passos(aac_z_blackman, numel(ix_labels));
+        
     %4.3 4.4 4.5
-
+    figure(6)
     esta(aac_x, 6);
     esta(aac_y, 6);
     esta(aac_z, 6);
+    
+    
 end
