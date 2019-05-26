@@ -61,3 +61,6 @@ figure('Name','Atividades Dinamicas')
 exercicio4_5(aac, 1)
 exercicio4_5(aac, 2)
 exercicio4_5(aac, 3)
+
+%5
+
