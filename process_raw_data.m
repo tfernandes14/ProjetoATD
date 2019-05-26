@@ -208,11 +208,24 @@ function [medias] = process_raw_data(expr, usr, medias, pos)
     disp('blackman z')
     medias{4,3}(:,pos) = passos(aac_z_blackman, numel(ix_labels));
         
-    %4.3 4.4 4.5
-    figure(6)
-    esta(aac_x, 6);
-    esta(aac_y, 6);
-    esta(aac_z, 6);
+    %4.3 
+    figure('Name','Atividades dinamicas vs Atividades de transicao e estaticas')
+    exercicio4_3(aac_x)
+    exercicio4_3(aac_y)
+    exercicio4_3(aac_z)
+
+    
+    %4.4
+    figure('Name','Tipos de Atividades')
+    esta(aac_x);
+    esta(aac_y);
+    esta(aac_z);
+    
+    %4.5
+    figure('Name','Atividades Dinamicas')
+    exercicio4_5(aac_x)
+    exercicio4_5(aac_y)
+    exercicio4_5(aac_z)
     
     
 end

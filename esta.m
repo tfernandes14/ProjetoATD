@@ -1,6 +1,5 @@
-function esta(valores, num)
+function esta(valores)
 
-figure(num)
 for i=1:12
     j=1;
     while(isempty(valores{i,j})~=1)
@@ -25,7 +24,7 @@ for i=1:12
             case 8
                 plot3(numPeaksCima, maxPeaks, numPeaksAbaixo, '*', 'color','green');
             case 9
-                plot3(numPeaksCima, maxPeaks, numPeaksAbaixo, '*','color', 'blue');
+                plot3(numPeaksCima, maxPeaks, numPeaksAbaixo, '*','color', 'yellow');
             case 10
                 plot3(numPeaksCima, maxPeaks, numPeaksAbaixo, '*','color', 'black');
             case 11
