@@ -1,4 +1,4 @@
-function [medias] = process_raw_data(expr, usr, medias, pos)
+function [medias, aac] = process_raw_data(expr, usr, medias, pos, aac)
     %TITULO DOS GRAFICOS
     Sensors={'ACC_X','ACC_Y','ACC_Z'};
     activities={'W','WU','WD','S','ST','L','STSit','SitTS','SitTL','LTSit','STL','LTS'};
@@ -25,7 +25,7 @@ function [medias] = process_raw_data(expr, usr, medias, pos)
     aac_x = cell(12, numel(ix_labels));
     aac_y = cell(12, numel(ix_labels));
     aac_z = cell(12, numel(ix_labels));
-
+    
     % Fazer um plot de todos os canais (x,y,z)
     figure('Name', txtFile)
     for i=1:n_plots
@@ -67,6 +67,11 @@ function [medias] = process_raw_data(expr, usr, medias, pos)
     %4.1
     figure('Name','Frequencias da DFT com a janela retangular')
     plot_windows(n_plots, aac_x, aac_y, aac_z, Fs)
+    
+    aac{1, pos} = aac_x;
+    aac{2, pos} = aac_y;
+    aac{3, pos} = aac_z;
+
 
     %varias janelas
 
@@ -208,24 +213,24 @@ function [medias] = process_raw_data(expr, usr, medias, pos)
     disp('blackman z')
     medias{4,3}(:,pos) = passos(aac_z_blackman, numel(ix_labels));
         
-    %4.3 
-    figure('Name','Atividades dinamicas vs Atividades de transicao e estaticas')
-    exercicio4_3(aac_x)
-    exercicio4_3(aac_y)
-    exercicio4_3(aac_z)
-
-    
-    %4.4
-    figure('Name','Tipos de Atividades')
-    esta(aac_x);
-    esta(aac_y);
-    esta(aac_z);
-    
-    %4.5
-    figure('Name','Atividades Dinamicas')
-    exercicio4_5(aac_x)
-    exercicio4_5(aac_y)
-    exercicio4_5(aac_z)
+%     %4.3 
+%     figure('Name','Atividades dinamicas vs Atividades de transicao e estaticas')
+%     exercicio4_3(aac_x)
+%     exercicio4_3(aac_y)
+%     exercicio4_3(aac_z)
+% 
+%     
+%     %4.4
+%     figure('Name','Tipos de Atividades')
+%     esta(aac_x);
+%     esta(aac_y);
+%     esta(aac_z);
+%     
+%     %4.5
+%     figure('Name','Atividades Dinamicas')
+%     exercicio4_5(aac_x)
+%     exercicio4_5(aac_y)
+%     exercicio4_5(aac_z)
     
     
 end
