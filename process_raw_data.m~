@@ -27,7 +27,7 @@ function [medias] = process_raw_data(expr, usr, medias, pos)
     aac_z = cell(12, numel(ix_labels));
 
     % Fazer um plot de todos os canais (x,y,z)
-    figure('Name', txtFile)
+    figure(1)
     for i=1:n_plots
         subplot(n_plots,1,i);
         plot(t./60,data(:,i),'k--');
@@ -185,28 +185,28 @@ function [medias] = process_raw_data(expr, usr, medias, pos)
     disp('retangular y')
     medias{1,2}(:,pos) = passos(aac_y, numel(ix_labels));
     disp('retangular z')
-    medias{1,3}(:,pos) = passos(aac_z, numel(ix_labels));
+    medias{1,3} (:,pos) = passos(aac_z, numel(ix_labels));
 
     disp('hamming x');
-    medias{2,1}(:,pos) = passos(aac_x_hamming, numel(ix_labels));
+    medias{2,1} (:,pos) = passos(aac_x_hamming, numel(ix_labels));
     disp('hamming y')
-    medias{2,2}(:,pos) = passos(aac_y_hamming, numel(ix_labels));
+    medias{2,2} (:,pos) = medias{2,2} + passos(aac_y_hamming, numel(ix_labels));
     disp('hamming z')
-    medias{2,3}(:,pos) = passos(aac_z_hamming, numel(ix_labels));
+    medias{2,3} (:,pos) = passos(aac_z_hamming, numel(ix_labels));
 
     disp('hann x');
-    medias{3,1}(:,pos) = passos(aac_x_hann, numel(ix_labels));
+    medias{3,1} (:,pos) = passos(aac_x_hann, numel(ix_labels));
     disp('hann y')
     medias{3,2}(:,pos) = passos(aac_y_hann, numel(ix_labels));
     disp('hann z')
-    medias{3,3}(:,pos) = passos(aac_z_hann, numel(ix_labels));
+    medias{3,3}(:,pos) = passos(aac_x_hann, numel(ix_labels));
 
     disp('blackman x');
-    medias{4,1}(:,pos) = passos(aac_x_blackman, numel(ix_labels));
+    medias{4,1} (:,pos)= passos(aac_x_blackman, numel(ix_labels));
     disp('blackman y')
     medias{4,2}(:,pos) = passos(aac_y_blackman, numel(ix_labels));
     disp('blackman z')
-    medias{4,3}(:,pos) = passos(aac_z_blackman, numel(ix_labels));
+    medias{4,3} (:,pos)= passos(aac_z_blackman, numel(ix_labels));
         
     %4.3 4.4 4.5
     figure(6)
